@@ -53,10 +53,10 @@ const AdminDashboard = () => {
 
     const handleSave = async (user) => {
         try {
-            if (user._id) {
-                await axios.put(`http://localhost:3001/api/users/${user._id}`, user); // Ensure the correct URL
+            if (editingUser && editingUser._id) {
+                await axios.put(`http://localhost:3001/api/users/${editingUser._id}`, user); // Ensure the correct URL
             } else {
-                await axios.post('http://localhost:3001/api/users', user); // Ensure the correct URL
+                await axios.post('http://localhost:3001/api/createuser', user); // Ensure the correct URL
             }
             fetchUsers();
             setEditingUser(null);
