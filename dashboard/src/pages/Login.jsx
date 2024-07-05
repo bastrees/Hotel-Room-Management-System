@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import './css/Login.css';
 import axios from 'axios';
-const { VITE_HOST } = import.meta.env;
+
 
 export default function Login() {
     const [values, setValues] = useState({
@@ -10,7 +10,9 @@ export default function Login() {
         password: ''
     });
     const navigate = useNavigate();
+    const { VITE_HOST } = import.meta.env;
 
+    
     const handleLogin = async (e) => {
         try {
             e.preventDefault();
