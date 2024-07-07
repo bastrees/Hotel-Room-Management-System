@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AdminDashboard.css'; // Import the CSS file
+import UserForm from './UserForm'; // Import the UserForm component
 
 const AdminDashboard = () => {
-    const [users, setUsers] = useState([]);
+    const [managers, setManagers] = useState([]);
+    const [customers, setCustomers] = useState([]);
     const [editingUser, setEditingUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -17,12 +19,16 @@ const AdminDashboard = () => {
         setLoading(true);
         setError(null);
         try {
-            const res = await axios.get('http://localhost:3001/api/users'); // Ensure the correct URL
-            console.log('Full API response:', res.data); // Log the full response
-            if (res.data.success && Array.isArray(res.data.users)) {
-                setUsers(res.data.users);
+            const [managersRes, customersRes] = await Promise.all([
+                axios.get('http://localhost:3001/api/users/managers'),
+                axios.get('http://localhost:3001/api/users/customers')
+            ]);
+
+            if (managersRes.data.success && customersRes.data.success) {
+                setManagers(managersRes.data.users);
+                setCustomers(customersRes.data.users);
             } else {
-                setError('Failed to fetch users: Invalid response structure');
+                setError('Failed to fetch users');
             }
             setLoading(false);
         } catch (error) {
@@ -34,7 +40,7 @@ const AdminDashboard = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/api/users/${id}`); // Ensure the correct URL
+            await axios.delete(`http://localhost:3001/api/users/${id}`);
             fetchUsers();
         } catch (error) {
             console.error('Error deleting user', error);
@@ -54,9 +60,9 @@ const AdminDashboard = () => {
     const handleSave = async (user) => {
         try {
             if (editingUser && editingUser._id) {
-                await axios.put(`http://localhost:3001/api/users/${editingUser._id}`, user); // Ensure the correct URL
+                await axios.put(`http://localhost:3001/api/users/${editingUser._id}`, user);
             } else {
-                await axios.post('http://localhost:3001/api/createuser', user); // Ensure the correct URL
+                await axios.post('http://localhost:3001/api/createuser', user);
             }
             fetchUsers();
             setEditingUser(null);
@@ -79,7 +85,14 @@ const AdminDashboard = () => {
                         <h2>User List</h2>
                         <button className="add-user-button" onClick={handleAddUser}>Add User</button>
                     </div>
-                    <UserList users={users} onDelete={handleDelete} onEdit={handleEdit} />
+                    <div className="user-list-section">
+                        <h2>Managers</h2>
+                        <UserList users={managers} onDelete={handleDelete} onEdit={handleEdit} />
+                    </div>
+                    <div className="user-list-section">
+                        <h2>Customers</h2>
+                        <UserList users={customers} onDelete={handleDelete} onEdit={handleEdit} />
+                    </div>
                     {showForm && <UserForm user={editingUser} onSave={handleSave} />}
                 </>
             )}
@@ -88,10 +101,9 @@ const AdminDashboard = () => {
 };
 
 const UserList = ({ users, onDelete, onEdit }) => {
-    console.log('Rendering UserList with users:', users); // Debug: Log users passed to UserList
     return (
         <div className="user-list">
-            {users && users.length === 0 ? (
+            {users.length === 0 ? (
                 <p>No users found</p>
             ) : (
                 <ul>
@@ -106,62 +118,6 @@ const UserList = ({ users, onDelete, onEdit }) => {
                     ))}
                 </ul>
             )}
-        </div>
-    );
-};
-
-const UserForm = ({ user, onSave }) => {
-    const [values, setValues] = useState({
-        username: user?.username || '',
-        password: '',
-        role: user?.role || 'customer',
-    });
-
-    useEffect(() => {
-        if (user) {
-            setValues({
-                username: user.username,
-                password: '',
-                role: user.role,
-            });
-        }
-    }, [user]);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setValues((prev) => ({ ...prev, [name]: value }));
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSave(values);
-    };
-
-    return (
-        <div className="admin-form">
-            <h2>{user ? 'Edit User' : 'Add User'}</h2>
-            <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    name="username"
-                    value={values.username}
-                    onChange={handleChange}
-                    placeholder="Username"
-                />
-                <input
-                    type="password"
-                    name="password"
-                    value={values.password}
-                    onChange={handleChange}
-                    placeholder="Password"
-                />
-                <select name="role" value={values.role} onChange={handleChange}>
-                    <option value="customer">Customer</option>
-                    <option value="manager">Manager</option>
-                    <option value="admin">Admin</option>
-                </select>
-                <button type="submit">Save</button>
-            </form>
         </div>
     );
 };

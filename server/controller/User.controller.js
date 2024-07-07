@@ -4,8 +4,20 @@ const UserModel = require('../models/User.model');
 const UserController = {
     CreateUser: async (req, res) => {
         try {
-            const { username, password, role } = req.body;
-            const data = await UserModel.create({ username, password, role });
+            const { username, password, role, firstName, lastName, address, contactNumber } = req.body;
+            
+            const hashedPassword = await bcrypt.hash(password, 10);
+            
+            const data = await UserModel.create({
+                username,
+                password: hashedPassword,
+                role,
+                firstName,
+                lastName,
+                address,
+                contactNumber
+            });
+
             res.json({ success: true, message: 'User created successfully!', data });
         } catch (error) {
             res.json({ error: `CreateUser in user controller error ${error}` });
@@ -57,6 +69,24 @@ const UserController = {
             res.json({ success: true, users });
         } catch (error) {
             res.json({ error: `ListUsers in user controller error ${error}` });
+        }
+    },
+
+    ListManagers: async (req, res) => {
+        try {
+            const managers = await UserModel.find({ role: 'manager' });
+            res.json({ success: true, users: managers });
+        } catch (error) {
+            res.json({ error: `ListManagers in user controller error ${error}` });
+        }
+    },
+
+    ListCustomers: async (req, res) => {
+        try {
+            const customers = await UserModel.find({ role: 'customer' });
+            res.json({ success: true, users: customers });
+        } catch (error) {
+            res.json({ error: `ListCustomers in user controller error ${error}` });
         }
     }
 };

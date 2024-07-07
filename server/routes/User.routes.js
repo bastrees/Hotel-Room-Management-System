@@ -8,5 +8,7 @@ router.post('/createuser', UserController.CreateUser);
 router.get('/users', UserController.ListUsers); 
 router.put('/users/:id', UserController.EditUser);
 router.delete('/users/:id', UserController.DeleteUser); 
+router.get('/users/managers', UserController.ListManagers);
+router.get('/users/customers', UserController.ListCustomers); 
 
 module.exports = router;

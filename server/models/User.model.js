@@ -15,6 +15,22 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['admin', 'customer', 'manager'],
         default: 'customer'
+    },
+    firstName: {
+        type: String,
+        required: function() { return this.role !== 'admin'; }
+    },
+    lastName: {
+        type: String,
+        required: function() { return this.role !== 'admin'; }
+    },
+    address: {
+        type: String,
+        required: function() { return this.role !== 'admin'; }
+    },
+    contactNumber: {
+        type: String,
+        required: function() { return this.role !== 'admin'; }
     }
 });
 
