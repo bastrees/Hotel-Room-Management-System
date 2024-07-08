@@ -1,18 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './AdminDashboard.css'; // Import the CSS file
-import UserForm from './UserForm'; // Import the UserForm component
 
 const AdminDashboard = () => {
     const [managers, setManagers] = useState([]);
     const [customers, setCustomers] = useState([]);
-    const [editingUser, setEditingUser] = useState(null);
+    const [pendingUsers, setPendingUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [showForm, setShowForm] = useState(false);
 
     useEffect(() => {
         fetchUsers();
+        fetchPendingUsers();
     }, []);
 
     const fetchUsers = async () => {
@@ -38,37 +37,40 @@ const AdminDashboard = () => {
         }
     };
 
-    const handleDelete = async (id) => {
+    const fetchPendingUsers = async () => {
+        setLoading(true);
+        setError(null);
         try {
-            await axios.delete(`http://localhost:3001/api/users/${id}`);
-            fetchUsers();
+            const res = await axios.get('http://localhost:3001/api/users/pending');
+            if (res.data.success) {
+                setPendingUsers(res.data.users);
+            } else {
+                setError('Failed to fetch pending users');
+            }
+            setLoading(false);
         } catch (error) {
-            console.error('Error deleting user', error);
+            console.error('Error fetching pending users:', error);
+            setError(`Error fetching pending users: ${error.message}`);
+            setLoading(false);
         }
     };
 
-    const handleEdit = (user) => {
-        setEditingUser(user);
-        setShowForm(true);
-    };
-
-    const handleAddUser = () => {
-        setEditingUser(null);
-        setShowForm(true);
-    };
-
-    const handleSave = async (user) => {
+    const handleApprove = async (id, role) => {
         try {
-            if (editingUser && editingUser._id) {
-                await axios.put(`http://localhost:3001/api/users/${editingUser._id}`, user);
-            } else {
-                await axios.post('http://localhost:3001/api/createuser', user);
-            }
-            fetchUsers();
-            setEditingUser(null);
-            setShowForm(false);
+            await axios.put(`http://localhost:3001/api/users/approve/${id}`, { role });
+            fetchPendingUsers();
+            fetchUsers(); // Refresh user lists
         } catch (error) {
-            console.error('Error saving user', error);
+            console.error('Error approving user', error);
+        }
+    };
+
+    const handleReject = async (id) => {
+        try {
+            await axios.delete(`http://localhost:3001/api/users/${id}`);
+            fetchPendingUsers();
+        } catch (error) {
+            console.error('Error rejecting user', error);
         }
     };
 
@@ -83,24 +85,35 @@ const AdminDashboard = () => {
                 <>
                     <div className="user-list-header">
                         <h2>User List</h2>
-                        <button className="add-user-button" onClick={handleAddUser}>Add User</button>
                     </div>
                     <div className="user-list-section">
                         <h2>Managers</h2>
-                        <UserList users={managers} onDelete={handleDelete} onEdit={handleEdit} />
+                        <UserList users={managers} />
                     </div>
                     <div className="user-list-section">
                         <h2>Customers</h2>
-                        <UserList users={customers} onDelete={handleDelete} onEdit={handleEdit} />
+                        <UserList users={customers} />
                     </div>
-                    {showForm && <UserForm user={editingUser} onSave={handleSave} />}
+                    <div className="user-list-section">
+                        <h2>Pending Users</h2>
+                        <ul>
+                            {pendingUsers.map((user) => (
+                                <li key={user._id}>
+                                    {user.username} ({user.firstName} {user.lastName})
+                                    <button onClick={() => handleApprove(user._id, 'customer')}>Approve as Customer</button>
+                                    <button onClick={() => handleApprove(user._id, 'manager')}>Approve as Manager</button>
+                                    <button onClick={() => handleReject(user._id)}>Reject</button>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                 </>
             )}
         </div>
     );
 };
 
-const UserList = ({ users, onDelete, onEdit }) => {
+const UserList = ({ users }) => {
     return (
         <div className="user-list">
             {users.length === 0 ? (
@@ -110,10 +123,6 @@ const UserList = ({ users, onDelete, onEdit }) => {
                     {users.map((user) => (
                         <li key={user._id}>
                             {user.username} ({user.role})
-                            <div>
-                                <button onClick={() => onEdit(user)}>Edit</button>
-                                <button onClick={() => onDelete(user._id)}>Delete</button>
-                            </div>
                         </li>
                     ))}
                 </ul>
