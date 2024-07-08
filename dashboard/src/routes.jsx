@@ -3,11 +3,11 @@ import { createBrowserRouter } from 'react-router-dom';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
-import Dashboard from './pages/customer/Dashboard'; // Updated path
+import Dashboard from './pages/customer/Dashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ManagerDashboard from './pages/manager/ManagerDashboard';
-import UserManagement from './pages/admin/UserManagement'; // Ensure this import is correct
-import Reports from './pages/admin/Reports';
+import UserManagement from './pages/admin/UserManagement';
+import Reports from './pages/admin/Reports'; // Reuse the Reports component for manager as well
 import RoomManagement from './pages/admin/RoomManagement';
 import BookingSystem from './pages/admin/BookingSystem';
 import Notifications from './pages/admin/Notifications';
@@ -89,6 +89,30 @@ const Routes = createBrowserRouter([
         element: (
             <ProtectedRoute allowedRoles={[roles.MANAGER]}>
                 <Layout><ManagerDashboard /></Layout>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/manager/room-management',
+        element: (
+            <ProtectedRoute allowedRoles={[roles.MANAGER]}>
+                <Layout><RoomManagement /></Layout>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/manager/booking-management',
+        element: (
+            <ProtectedRoute allowedRoles={[roles.MANAGER]}>
+                <Layout><BookingSystem /></Layout>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/manager/reports',
+        element: (
+            <ProtectedRoute allowedRoles={[roles.MANAGER]}>
+                <Layout><Reports /></Layout>
             </ProtectedRoute>
         ),
     },
