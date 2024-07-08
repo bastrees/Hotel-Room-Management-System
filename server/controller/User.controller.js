@@ -5,12 +5,17 @@ const UserController = {
     CreateUser: async (req, res) => {
         try {
             const { username, password, role, firstName, lastName, address, contactNumber } = req.body;
-            
-            const hashedPassword = await bcrypt.hash(password, 10);
-            
-            const data = await UserModel.create({
+
+            // Check if user already exists
+            const existingUser = await UserModel.findOne({ username });
+            if (existingUser) {
+                return res.json({ success: false, message: 'Username already exists' });
+            }
+
+            // Create a new user instance
+            const newUser = new UserModel({
                 username,
-                password: hashedPassword,
+                password,
                 role,
                 firstName,
                 lastName,
@@ -18,7 +23,9 @@ const UserController = {
                 contactNumber
             });
 
-            res.json({ success: true, message: 'User created successfully!', data });
+            // Save the new user
+            const savedUser = await newUser.save();
+            res.json({ success: true, message: 'User created successfully!', user: savedUser });
         } catch (error) {
             res.json({ error: `CreateUser in user controller error ${error}` });
         }
@@ -47,7 +54,12 @@ const UserController = {
     EditUser: async (req, res) => {
         try {
             const { id } = req.params;
-            const updates = req.body;
+            const { password, ...updates } = req.body;
+
+            if (password) {
+                updates.password = password; // Password hashing will be handled by the pre 'findOneAndUpdate' hook
+            }
+
             const user = await UserModel.findByIdAndUpdate(id, updates, { new: true });
             res.json({ success: true, message: 'User updated successfully!', user });
         } catch (error) {

@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
     }
 });
 
-// Password hashing middleware
+// Password hashing middleware for creating a new user
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {
         return next();
@@ -48,7 +48,7 @@ userSchema.pre('save', async function (next) {
     }
 });
 
-// Password hashing middleware for update
+// Password hashing middleware for updating an existing user
 userSchema.pre('findOneAndUpdate', async function (next) {
     const update = this.getUpdate();
     if (update.password) {
