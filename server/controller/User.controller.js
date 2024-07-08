@@ -50,7 +50,14 @@ const UserController = {
 
                 if (isPasswordCorrect) {
                     if (user.isActive) {
-                        res.json({ success: true, message: 'User exists, login successfully', role: user.role });
+                        res.json({
+                            success: true,
+                            message: 'User exists, login successfully',
+                            userId: user._id,
+                            role: user.role,
+                            firstName: user.firstName,
+                            lastName: user.lastName
+                        });
                     } else {
                         res.json({ success: false, message: 'Account is not active. Please contact the administrator.' });
                     }

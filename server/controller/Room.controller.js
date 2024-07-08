@@ -15,16 +15,21 @@ const RoomController = {
     getAllRooms: async (req, res) => {
         try {
             const rooms = await RoomModel.find();
-            const roomsByType = rooms.reduce((acc, room) => {
-                if (!acc[room.type]) {
-                    acc[room.type] = [];
-                }
-                acc[room.type].push(room);
-                return acc;
-            }, {});
-            res.json({ success: true, rooms: roomsByType });
+            res.json({ success: true, rooms }); // Return flat array of rooms
         } catch (error) {
             res.json({ success: false, message: `Error fetching rooms: ${error.message}` });
+        }
+    },
+
+    searchRooms: async (req, res) => {
+        try {
+            const { date, type } = req.query;
+            const query = { status: 'available' };
+            if (type) query.type = type;
+            const rooms = await RoomModel.find(query);
+            res.json({ success: true, rooms: rooms || [] }); // Ensure rooms is always an array
+        } catch (error) {
+            res.json({ success: false, message: `Error searching rooms: ${error.message}` });
         }
     },
 

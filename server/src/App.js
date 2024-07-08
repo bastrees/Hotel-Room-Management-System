@@ -2,10 +2,10 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 
-const connectDb = require('../config/db');
-
+const ConnectToDatabase = require('../config/db');
 const UserRoute = require('../routes/User.routes');
 const RoomRoute = require('../routes/Room.routes');
+const BookingRoute = require('../routes/Booking.routes');
 
 app.use(cors({
     origin: '*',
@@ -13,17 +13,18 @@ app.use(cors({
     credentials: true,
 }));
 
-connectDb();
+ConnectToDatabase();
 
 app.use(express.json());
 
 app.get('/', (req, res) => {
     res.json({
-        message: 'Welcome'
+        message: `Welcome`
     });
 });
 
 app.use('/api', UserRoute);
-app.use('/api', RoomRoute); // Ensure this line is present
+app.use('/api', RoomRoute);
+app.use('/api', BookingRoute);
 
 module.exports = app;

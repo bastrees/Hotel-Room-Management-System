@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const RoomController = require('../controller/Room.controller');
 
+// Define the search route before the :id route
+router.get('/rooms/search', RoomController.searchRooms);
 router.post('/rooms', RoomController.createRoom);
 router.get('/rooms', RoomController.getAllRooms);
 router.get('/rooms/:id', RoomController.getRoomById);
