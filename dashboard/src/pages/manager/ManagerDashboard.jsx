@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import './ManagerDashboard.css'; // Create and import the CSS file for manager dashboard
+import './ManagerDashboard.css';
 
 const ManagerDashboard = () => {
     const navigate = useNavigate();
