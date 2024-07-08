@@ -17,7 +17,7 @@ const Navbar = () => {
             <div className="navbar-brand">
                 <Link to="/">HRMS</Link>
             </div>
-            <div className=" navbar-links">
+            <div className="navbar-links">
                 {!userRole ? (
                     <>
                         <Link to="/login">Login</Link>
