@@ -1,26 +1,29 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './css/SignUp.css';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-const { VITE_HOST } = import.meta.env;
+import './css/SignUp.css';
 
-export default function SignUp() {
+export default function Signup() {
     const [values, setValues] = useState({
         username: '',
         password: '',
-        role: 'customer' // default role
+        firstName: '',
+        lastName: '',
+        address: '',
+        contactNumber: ''
     });
     const navigate = useNavigate();
 
-    const handleSignUp = async (e) => {
-        e.preventDefault();
+    const handleSignup = async (e) => {
         try {
-            const res = await axios.post(`${VITE_HOST}/api/createuser`, values);
+            e.preventDefault();
+            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/createuser`, values);
 
-            if (res.data.success) {
+            if (res?.data?.success) {
+                alert('Signup successful! Your account is pending approval.');
                 navigate('/login');
             } else {
-                alert(res.data.message);
+                alert(res?.data?.message);
             }
         } catch (error) {
             console.error(error);
@@ -37,27 +40,53 @@ export default function SignUp() {
 
     return (
         <div className="signup">
-            <form onSubmit={handleSignUp} className="signup-form">
+            <form onSubmit={handleSignup} className="signup-form">
                 <input
+                    onChange={handleOnChange}
                     type="text"
+                    value={values.username}
                     name="username"
                     placeholder="Enter username"
-                    value={values.username}
-                    onChange={handleOnChange}
                 />
                 <input
+                    onChange={handleOnChange}
                     type="password"
+                    value={values.password}
                     name="password"
                     placeholder="Enter password"
-                    value={values.password}
-                    onChange={handleOnChange}
                 />
-                <select name="role" value={values.role} onChange={handleOnChange}>
-                    <option value="customer">Customer</option>
-                    <option value="manager">Manager</option>
-                    <option value="admin">Admin</option>
-                </select>
+                <input
+                    onChange={handleOnChange}
+                    type="text"
+                    value={values.firstName}
+                    name="firstName"
+                    placeholder="Enter first name"
+                />
+                <input
+                    onChange={handleOnChange}
+                    type="text"
+                    value={values.lastName}
+                    name="lastName"
+                    placeholder="Enter last name"
+                />
+                <input
+                    onChange={handleOnChange}
+                    type="text"
+                    value={values.address}
+                    name="address"
+                    placeholder="Enter address"
+                />
+                <input
+                    onChange={handleOnChange}
+                    type="text"
+                    value={values.contactNumber}
+                    name="contactNumber"
+                    placeholder="Enter contact number"
+                />
                 <button type="submit">Sign Up</button>
+                <p>
+                    Already have an account? <Link to="/login">Log In</Link>
+                </p>
             </form>
         </div>
     );
