@@ -1,0 +1,50 @@
+.room-search {
+    padding: 2rem;
+}
+
+.room-search h2 {
+    margin-bottom: 1rem;
+}
+
+.room-search button {
+    margin-bottom: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.room-search button:hover {
+    background-color: #0056b3;
+}
+
+.room-search ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.room-search li {
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.room-search li p {
+    margin: 0.5rem 0;
+}
+
+.room-search li button {
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.room-search li button:hover {
+    background-color: #218838;
+}
