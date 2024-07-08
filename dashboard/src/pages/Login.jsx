@@ -3,7 +3,6 @@ import { useNavigate, Link } from 'react-router-dom';
 import './css/Login.css';
 import axios from 'axios';
 
-
 export default function Login() {
     const [values, setValues] = useState({
         username: '',
@@ -12,7 +11,6 @@ export default function Login() {
     const navigate = useNavigate();
     const { VITE_HOST } = import.meta.env;
 
-    
     const handleLogin = async (e) => {
         try {
             e.preventDefault();
@@ -20,13 +18,18 @@ export default function Login() {
 
             if (res?.data?.success) {
                 localStorage.setItem('userRole', res.data.role);
+                localStorage.setItem('userId', res.data.userId);
+                localStorage.setItem('firstName', res.data.firstName);
+                localStorage.setItem('lastName', res.data.lastName);
 
                 if (res.data.role === 'admin') {
                     navigate('/admin');
                 } else if (res.data.role === 'manager') {
                     navigate('/manager');
+                } else if (res.data.role === 'customer') {
+                    navigate('/customer');
                 } else {
-                    navigate('/dashboard');
+                    navigate('/login');
                 }
             } else {
                 alert(res?.data?.message);
