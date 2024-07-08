@@ -4,7 +4,7 @@ const UserModel = require('../models/User.model');
 const UserController = {
     CreateUser: async (req, res) => {
         try {
-            const { username, password, role, firstName, lastName, address, contactNumber } = req.body;
+            const { username, password, firstName, lastName, address, contactNumber } = req.body;
 
             // Check if user already exists
             const existingUser = await UserModel.findOne({ username });
@@ -16,20 +16,21 @@ const UserController = {
             const newUser = new UserModel({
                 username,
                 password,
-                role,
                 firstName,
                 lastName,
                 address,
-                contactNumber
+                contactNumber,
+                isActive: false // New users are inactive by default
             });
 
             // Save the new user
             const savedUser = await newUser.save();
-            res.json({ success: true, message: 'User created successfully!', user: savedUser });
+            res.json({ success: true, message: 'User created successfully! Pending admin approval.', user: savedUser });
         } catch (error) {
             res.json({ error: `CreateUser in user controller error ${error}` });
         }
     },
+
     LoginUser: async (req, res) => {
         try {
             const { username, password } = req.body;
@@ -37,10 +38,14 @@ const UserController = {
             const user = await UserModel.findOne({ username });
 
             if (user) {
-                const isMatch = await bcrypt.compare(password, user.password);
+                const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
-                if (isMatch) {
-                    res.json({ success: true, message: 'User exists, login successfully', role: user.role });
+                if (isPasswordCorrect) {
+                    if (user.isActive) {
+                        res.json({ success: true, message: 'User exists, login successfully', role: user.role });
+                    } else {
+                        res.json({ success: false, message: 'Account is not active. Please contact the administrator.' });
+                    }
                 } else {
                     res.json({ success: false, message: 'Password is not correct' });
                 }
@@ -51,30 +56,7 @@ const UserController = {
             res.json({ error: `LoginUser in user controller error ${error}` });
         }
     },
-    EditUser: async (req, res) => {
-        try {
-            const { id } = req.params;
-            const { password, ...updates } = req.body;
 
-            if (password) {
-                updates.password = password; // Password hashing will be handled by the pre 'findOneAndUpdate' hook
-            }
-
-            const user = await UserModel.findByIdAndUpdate(id, updates, { new: true });
-            res.json({ success: true, message: 'User updated successfully!', user });
-        } catch (error) {
-            res.json({ error: `EditUser in user controller error ${error}` });
-        }
-    },
-    DeleteUser: async (req, res) => {
-        try {
-            const { id } = req.params;
-            await UserModel.findByIdAndDelete(id);
-            res.json({ success: true, message: 'User deleted successfully!' });
-        } catch (error) {
-            res.json({ error: `DeleteUser in user controller error ${error}` });
-        }
-    },
     ListUsers: async (req, res) => {
         try {
             const users = await UserModel.find();
@@ -84,10 +66,37 @@ const UserController = {
         }
     },
 
+    EditUser: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { password, ...updates } = req.body;
+
+            if (password) {
+                updates.password = await bcrypt.hash(password, 10);
+            }
+
+            const user = await UserModel.findByIdAndUpdate(id, updates, { new: true });
+            res.json({ success: true, message: 'User updated successfully!', user });
+        } catch (error) {
+            res.json({ error: `EditUser in user controller error ${error}` });
+        }
+    },
+
+    DeleteUser: async (req, res) => {
+        try {
+            const { id } = req.params;
+
+            await UserModel.findByIdAndDelete(id);
+            res.json({ success: true, message: 'User deleted successfully!' });
+        } catch (error) {
+            res.json({ error: `DeleteUser in user controller error ${error}` });
+        }
+    },
+
     ListManagers: async (req, res) => {
         try {
-            const managers = await UserModel.find({ role: 'manager' });
-            res.json({ success: true, users: managers });
+            const users = await UserModel.find({ role: 'manager' });
+            res.json({ success: true, users });
         } catch (error) {
             res.json({ error: `ListManagers in user controller error ${error}` });
         }
@@ -95,12 +104,33 @@ const UserController = {
 
     ListCustomers: async (req, res) => {
         try {
-            const customers = await UserModel.find({ role: 'customer' });
-            res.json({ success: true, users: customers });
+            const users = await UserModel.find({ role: 'customer' });
+            res.json({ success: true, users });
         } catch (error) {
             res.json({ error: `ListCustomers in user controller error ${error}` });
         }
-    }
+    },
+
+    ListPendingUsers: async (req, res) => {
+        try {
+            const users = await UserModel.find({ isActive: false });
+            res.json({ success: true, users });
+        } catch (error) {
+            res.json({ error: `ListPendingUsers in user controller error ${error}` });
+        }
+    },
+
+    ApproveUser: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const { role } = req.body;
+
+            const user = await UserModel.findByIdAndUpdate(id, { isActive: true, role }, { new: true });
+            res.json({ success: true, message: 'User approved successfully!', user });
+        } catch (error) {
+            res.json({ error: `ApproveUser in user controller error ${error}` });
+        }
+    },
 };
 
 module.exports = UserController;
