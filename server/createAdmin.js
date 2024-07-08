@@ -16,7 +16,7 @@ const connectDb = async () => {
 
 const createAdminUser = async () => {
     const username = 'admin';
-    const plainPassword = 'your_admin_password'; // Change this to your desired admin password
+    const plainPassword = 'admin'; // Change this to your desired admin password
 
     try {
         // Check if admin already exists
