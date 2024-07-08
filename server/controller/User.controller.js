@@ -12,10 +12,14 @@ const UserController = {
                 return res.json({ success: false, message: 'Username already exists' });
             }
 
+            // Set default role to 'customer'
+            const role = 'customer';
+
             // Create a new user instance
             const newUser = new UserModel({
                 username,
                 password,
+                role,
                 firstName,
                 lastName,
                 address,
@@ -37,8 +41,12 @@ const UserController = {
 
             const user = await UserModel.findOne({ username });
 
+            console.log('Retrieved user:', user); // Log the user object
+
             if (user) {
                 const isPasswordCorrect = await bcrypt.compare(password, user.password);
+                console.log('isPasswordCorrect:', isPasswordCorrect); // Log password comparison result
+                console.log('user.isActive:', user.isActive); // Log isActive field
 
                 if (isPasswordCorrect) {
                     if (user.isActive) {

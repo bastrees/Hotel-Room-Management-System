@@ -3,6 +3,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import './css/SignUp.css';
 
+const API_URL = import.meta.env.VITE_HOST;
+
 export default function Signup() {
     const [values, setValues] = useState({
         username: '',
@@ -17,7 +19,7 @@ export default function Signup() {
     const handleSignup = async (e) => {
         try {
             e.preventDefault();
-            const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/createuser`, values);
+            const res = await axios.post(`${API_URL}/api/createuser`, values);
 
             if (res?.data?.success) {
                 alert('Signup successful! Your account is pending approval.');

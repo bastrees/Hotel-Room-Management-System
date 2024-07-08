@@ -18,23 +18,23 @@ const userSchema = new mongoose.Schema({
     },
     firstName: {
         type: String,
-        required: function() { return this.role !== 'admin'; }
     },
     lastName: {
         type: String,
-        required: function() { return this.role !== 'admin'; }
     },
     address: {
         type: String,
-        required: function() { return this.role !== 'admin'; }
     },
     contactNumber: {
         type: String,
-        required: function() { return this.role !== 'admin'; }
+    },
+    isActive: {
+        type: Boolean,
+        default: false
     }
 });
 
-// Password hashing middleware for creating a new user
+// Password hashing middleware
 userSchema.pre('save', async function (next) {
     if (!this.isModified('password')) {
         return next();
@@ -48,7 +48,7 @@ userSchema.pre('save', async function (next) {
     }
 });
 
-// Password hashing middleware for updating an existing user
+// Password hashing middleware for update
 userSchema.pre('findOneAndUpdate', async function (next) {
     const update = this.getUpdate();
     if (update.password) {
