@@ -6,7 +6,10 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const handleLogout = () => {
+        localStorage.removeItem('userId');
         localStorage.removeItem('userRole');
+        localStorage.removeItem('firstName');
+        localStorage.removeItem('lastName');
         navigate('/login');
     };
 
@@ -26,7 +29,7 @@ const Navbar = () => {
                     <>
                         {userRole === 'admin' && <Link to="/admin">Admin Dashboard</Link>}
                         {userRole === 'manager' && <Link to="/manager">Manager Dashboard</Link>}
-                        {userRole === 'customer' && <Link to="/dashboard">Dashboard</Link>}
+                        {userRole === 'customer' && <Link to="/customer">Customer Dashboard</Link>}
                         <button onClick={handleLogout}>Logout</button>
                     </>
                 )}
