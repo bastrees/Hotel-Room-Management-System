@@ -7,10 +7,9 @@ import Dashboard from './pages/customer/Dashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import ManagerDashboard from './pages/manager/ManagerDashboard';
 import UserManagement from './pages/admin/UserManagement';
-import Reports from './pages/admin/Reports'; // Reuse the Reports component for manager as well
-import RoomManagement from './pages/admin/RoomManagement';
-import BookingSystem from './pages/admin/BookingSystem';
-import Notifications from './pages/admin/Notifications';
+import Reports from './pages/admin/Reports';
+import RoomManagementPage from './pages/admin/RoomManagementPage';
+import ManagerRoomManagementPage from './pages/manager/RoomManagementPage';
 import ProtectedRoute from './ProtectedRoute';
 import Layout from './components/Layout';
 import { roles } from './roles';
@@ -64,23 +63,7 @@ const Routes = createBrowserRouter([
         path: '/admin/room-management',
         element: (
             <ProtectedRoute allowedRoles={[roles.ADMIN]}>
-                <Layout><RoomManagement /></Layout>
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: '/admin/booking-system',
-        element: (
-            <ProtectedRoute allowedRoles={[roles.ADMIN]}>
-                <Layout><BookingSystem /></Layout>
-            </ProtectedRoute>
-        ),
-    },
-    {
-        path: '/admin/notifications',
-        element: (
-            <ProtectedRoute allowedRoles={[roles.ADMIN]}>
-                <Layout><Notifications /></Layout>
+                <Layout><RoomManagementPage /></Layout>
             </ProtectedRoute>
         ),
     },
@@ -96,7 +79,7 @@ const Routes = createBrowserRouter([
         path: '/manager/room-management',
         element: (
             <ProtectedRoute allowedRoles={[roles.MANAGER]}>
-                <Layout><RoomManagement /></Layout>
+                <Layout><ManagerRoomManagementPage /></Layout>
             </ProtectedRoute>
         ),
     },
@@ -104,7 +87,7 @@ const Routes = createBrowserRouter([
         path: '/manager/booking-management',
         element: (
             <ProtectedRoute allowedRoles={[roles.MANAGER]}>
-                <Layout><BookingSystem /></Layout>
+                <Layout><Reports /></Layout>
             </ProtectedRoute>
         ),
     },
