@@ -1,4 +1,5 @@
 const BookingModel = require('../models/Booking.model');
+const RoomModel = require('../models/Room.model');
 
 const BookingController = {
     createBooking: async (req, res) => {
@@ -14,7 +15,7 @@ const BookingController = {
 
     listBookings: async (req, res) => {
         try {
-            const bookings = await BookingModel.find().populate('roomId');
+            const bookings = await BookingModel.find().populate('roomId').populate('customerId');
             res.json({ success: true, bookings });
         } catch (error) {
             res.json({ success: false, message: `Error fetching bookings: ${error.message}` });
@@ -31,6 +32,35 @@ const BookingController = {
             res.json({ success: true, message: 'Booking canceled successfully!' });
         } catch (error) {
             res.json({ success: false, message: `Error canceling booking: ${error.message}` });
+        }
+    },
+
+    approveBooking: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const booking = await BookingModel.findByIdAndUpdate(id, { status: 'approved' }, { new: true }).populate('roomId');
+            if (!booking) {
+                return res.json({ success: false, message: 'Booking not found' });
+            }
+
+            await RoomModel.findByIdAndUpdate(booking.roomId._id, { status: 'booked' });
+
+            res.json({ success: true, message: 'Booking approved successfully!', booking });
+        } catch (error) {
+            res.json({ success: false, message: `Error approving booking: ${error.message}` });
+        }
+    },
+
+    rejectBooking: async (req, res) => {
+        try {
+            const { id } = req.params;
+            const booking = await BookingModel.findByIdAndUpdate(id, { status: 'rejected' }, { new: true });
+            if (!booking) {
+                return res.json({ success: false, message: 'Booking not found' });
+            }
+            res.json({ success: true, message: 'Booking rejected successfully!', booking });
+        } catch (error) {
+            res.json({ success: false, message: `Error rejecting booking: ${error.message}` });
         }
     },
 

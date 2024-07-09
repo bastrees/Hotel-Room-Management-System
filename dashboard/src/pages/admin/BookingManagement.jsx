@@ -1,11 +1,11 @@
-// src/components/Customer/BookingHistory.jsx
+// src/pages/admin/BookingManagement.jsx
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import BookingList from '../BookingList/BookingList';
-import './BookingHistory.css';
+import BookingList from '../../components/BookingList/BookingList';
 
-const BookingHistory = () => {
+
+const BookingManagement = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -19,8 +19,7 @@ const BookingHistory = () => {
         setLoading(true);
         setError(null);
         try {
-            const customerId = localStorage.getItem('userId');
-            const res = await axios.get(`${VITE_HOST}/api/bookings/customer/${customerId}`);
+            const res = await axios.get(`${VITE_HOST}/api/bookings`);
             if (res.data.success) {
                 setBookings(res.data.bookings);
             } else {
@@ -34,27 +33,36 @@ const BookingHistory = () => {
         }
     };
 
-    const handleCancel = async (id) => {
+    const handleApprove = async (id) => {
         try {
-            await axios.put(`${VITE_HOST}/api/bookings/cancel/${id}`);
+            await axios.put(`${VITE_HOST}/api/bookings/approve/${id}`);
             fetchBookings();
         } catch (error) {
-            console.error('Error canceling booking', error);
+            console.error('Error approving booking', error);
+        }
+    };
+
+    const handleReject = async (id) => {
+        try {
+            await axios.put(`${VITE_HOST}/api/bookings/reject/${id}`);
+            fetchBookings();
+        } catch (error) {
+            console.error('Error rejecting booking', error);
         }
     };
 
     return (
-        <div className="booking-history">
-            <h2>Booking History</h2>
+        <div className="booking-management">
+            <h2>Booking Management</h2>
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (
                 <p>{error}</p>
             ) : (
-                <BookingList bookings={bookings} onCancel={handleCancel} userRole="customer" />
+                <BookingList bookings={bookings} onApprove={handleApprove} onReject={handleReject} userRole="admin" />
             )}
         </div>
     );
 };
 
-export default BookingHistory;
+export default BookingManagement;

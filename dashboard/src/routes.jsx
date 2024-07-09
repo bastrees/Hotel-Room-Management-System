@@ -12,6 +12,8 @@ import RoomManagementPage from './pages/admin/RoomManagementPage';
 import ManagerRoomManagementPage from './pages/manager/RoomManagementPage';
 import RoomSearch from './components/Customer/RoomSearch';
 import BookingHistory from './components/Customer/BookingHistory';
+import BookingManagement from './pages/admin/BookingManagement'; // Ensure the correct path
+import ManagerBookingManagement from './pages/manager/BookingManagement'; // Ensure the correct path
 import ProtectedRoute from './ProtectedRoute';
 import Layout from './components/Layout';
 import { roles } from './roles';
@@ -86,6 +88,14 @@ const Routes = createBrowserRouter([
         ),
     },
     {
+        path: '/admin/booking-management',
+        element: (
+            <ProtectedRoute allowedRoles={[roles.ADMIN]}>
+                <Layout><BookingManagement /></Layout>
+            </ProtectedRoute>
+        ),
+    },
+    {
         path: '/manager',
         element: (
             <ProtectedRoute allowedRoles={[roles.MANAGER]}>
@@ -105,7 +115,7 @@ const Routes = createBrowserRouter([
         path: '/manager/booking-management',
         element: (
             <ProtectedRoute allowedRoles={[roles.MANAGER]}>
-                <Layout><Reports /></Layout>
+                <Layout><ManagerBookingManagement /></Layout>
             </ProtectedRoute>
         ),
     },

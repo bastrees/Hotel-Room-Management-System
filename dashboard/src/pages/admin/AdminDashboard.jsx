@@ -24,8 +24,8 @@ const AdminDashboard = () => {
                     <p>Manage room listings and availability.</p>
                     <button>Manage Rooms</button>
                 </div>
-                <div className="card" onClick={() => navigate('/admin/booking-system')}>
-                    <h2>Booking System</h2>
+                <div className="card" onClick={() => navigate('/admin/booking-management')}>
+                    <h2>Booking Management</h2>
                     <p>View and manage bookings.</p>
                     <button>View Bookings</button>
                 </div>
