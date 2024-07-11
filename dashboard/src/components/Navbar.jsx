@@ -21,6 +21,9 @@ const Navbar = () => {
                 <Link to="/">HRMS</Link>
             </div>
             <div className="navbar-links">
+                <Link to="/">Home</Link>
+                <Link to="/about">About</Link>
+                <Link to="/contact">Contact</Link>
                 {!userRole ? (
                     <>
                         <Link to="/login">Login</Link>

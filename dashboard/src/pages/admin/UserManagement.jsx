@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './AdminDashboard.css'; // Reuse the same CSS file
+import './UserManagement.css';
 
 const UserManagement = () => {
     const [managers, setManagers] = useState([]);
@@ -10,6 +10,7 @@ const UserManagement = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [showForm, setShowForm] = useState(false);
+    const { VITE_HOST } = import.meta.env;
 
     useEffect(() => {
         fetchUsers();
@@ -21,8 +22,8 @@ const UserManagement = () => {
         setError(null);
         try {
             const [managersRes, customersRes] = await Promise.all([
-                axios.get('http://localhost:3001/api/users/managers'),
-                axios.get('http://localhost:3001/api/users/customers')
+                axios.get(`${VITE_HOST}/api/users/managers`),
+                axios.get(`${VITE_HOST}/api/users/customers`)
             ]);
 
             if (managersRes.data.success && customersRes.data.success) {
@@ -43,7 +44,7 @@ const UserManagement = () => {
         setLoading(true);
         setError(null);
         try {
-            const res = await axios.get('http://localhost:3001/api/users/pending');
+            const res = await axios.get(`${VITE_HOST}/api/users/pending`);
             if (res.data.success) {
                 setPendingUsers(res.data.users);
             } else {
@@ -59,7 +60,7 @@ const UserManagement = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/api/users/${id}`);
+            await axios.delete(`${VITE_HOST}/api/users/${id}`);
             fetchUsers();
             fetchPendingUsers();
         } catch (error) {
@@ -74,7 +75,7 @@ const UserManagement = () => {
 
     const handleSave = async (user) => {
         try {
-            await axios.put(`http://localhost:3001/api/users/${user._id}`, user);
+            await axios.put(`${VITE_HOST}/api/users/${user._id}`, user);
             fetchUsers();
             fetchPendingUsers();
             setEditingUser(null);
@@ -86,7 +87,7 @@ const UserManagement = () => {
 
     const handleApprove = async (id, role) => {
         try {
-            await axios.put(`http://localhost:3001/api/users/approve/${id}`, { role });
+            await axios.put(`${VITE_HOST}/api/users/approve/${id}`, { role });
             fetchPendingUsers();
             fetchUsers();
         } catch (error) {
@@ -96,7 +97,7 @@ const UserManagement = () => {
 
     const handleReject = async (id) => {
         try {
-            await axios.delete(`http://localhost:3001/api/users/${id}`);
+            await axios.delete(`${VITE_HOST}/api/users/${id}`);
             fetchPendingUsers();
         } catch (error) {
             console.error('Error rejecting user', error);
@@ -104,59 +105,71 @@ const UserManagement = () => {
     };
 
     return (
-        <div className="admin-dashboard">
-            <h1>User Management</h1>
+        <div className="user-management">
+            <h2>User Management</h2>
             {loading ? (
                 <p>Loading...</p>
             ) : error ? (
                 <p>{error}</p>
             ) : (
                 <>
-                    <div className="user-list-section">
-                        <h2>Managers</h2>
-                        <UserList users={managers} onDelete={handleDelete} onEdit={handleEdit} />
-                    </div>
-                    <div className="user-list-section">
-                        <h2>Customers</h2>
-                        <UserList users={customers} onDelete={handleDelete} onEdit={handleEdit} />
-                    </div>
-                    <div className="user-list-section">
-                        <h2>Pending Users</h2>
-                        <ul>
-                            {pendingUsers.map((user) => (
-                                <li key={user._id}>
-                                    {user.username} ({user.firstName} {user.lastName})
-                                    <button onClick={() => handleApprove(user._id, 'customer')}>Approve as Customer</button>
-                                    <button onClick={() => handleApprove(user._id, 'manager')}>Approve as Manager</button>
-                                    <button onClick={() => handleReject(user._id)}>Reject</button>
-                                </li>
-                            ))}
-                        </ul>
+                    <div className="user-type-columns">
+                        <div className="user-type-column">
+                            <h3>Managers</h3>
+                            <div className="user-grid">
+                                {managers.map((user) => (
+                                    <div key={user._id} className="user-card">
+                                        <p><strong>{user.username}</strong></p>
+                                        <p>{user.firstName} {user.lastName}</p>
+                                        <p>{user.address}</p>
+                                        <p>{user.contactNumber}</p>
+                                        <div className="button-container">
+                                            <button onClick={() => handleEdit(user)}>Edit</button>
+                                            <button onClick={() => handleDelete(user._id)}>Delete</button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="user-type-column">
+                            <h3>Customers</h3>
+                            <div className="user-grid">
+                                {customers.map((user) => (
+                                    <div key={user._id} className="user-card">
+                                        <p><strong>{user.username}</strong></p>
+                                        <p>{user.firstName} {user.lastName}</p>
+                                        <p>{user.address}</p>
+                                        <p>{user.contactNumber}</p>
+                                        <div className="button-container">
+                                            <button onClick={() => handleEdit(user)}>Edit</button>
+                                            <button onClick={() => handleDelete(user._id)}>Delete</button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="user-type-column">
+                            <h3>Pending Users</h3>
+                            <div className="pending-users">
+                                <ul>
+                                    {pendingUsers.map((user) => (
+                                        <li key={user._id} className="pending-user-card">
+                                            <div>
+                                                <p>{user.username} ({user.firstName} {user.lastName})</p>
+                                                <div className="button-container">
+                                                    <button onClick={() => handleApprove(user._id, 'customer')}>Approve as Customer</button>
+                                                    <button onClick={() => handleApprove(user._id, 'manager')}>Approve as Manager</button>
+                                                    <button onClick={() => handleReject(user._id)}>Reject</button>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     {showForm && <UserForm user={editingUser} onSave={handleSave} />}
                 </>
-            )}
-        </div>
-    );
-};
-
-const UserList = ({ users, onDelete, onEdit }) => {
-    return (
-        <div className="user-list">
-            {users.length === 0 ? (
-                <p>No users found</p>
-            ) : (
-                <ul>
-                    {users.map((user) => (
-                        <li key={user._id}>
-                            {user.username} ({user.role})
-                            <div>
-                                <button onClick={() => onEdit(user)}>Edit</button>
-                                <button onClick={() => onDelete(user._id)}>Delete</button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
             )}
         </div>
     );

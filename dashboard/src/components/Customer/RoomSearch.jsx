@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import RoomTypeCard from './RoomTypeCard';
 import RoomBookingModal from './RoomBookingModal';
-
+import './RoomSearch.css';
 
 const RoomSearch = () => {
     const [roomTypes, setRoomTypes] = useState([]);

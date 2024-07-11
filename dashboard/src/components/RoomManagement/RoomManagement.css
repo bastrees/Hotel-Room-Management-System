@@ -1,92 +1,114 @@
-.room-form {
+/* src/pages/admin/RoomManagement.css */
+
+.room-management {
+    padding: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+}
+
+.room-management h2 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+    color: #333;
+    text-align: center;
+}
+
+.room-management button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.room-management button:hover {
+    background-color: #0056b3;
+}
+
+.room-type-columns {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.room-type-column {
+    flex: 1;
+    min-width: 300px;
+    max-width: 400px;
+    margin: 10px;
+}
+
+.room-type-column h3 {
+    font-size: 1.8rem;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 20px;
+    justify-items: center;
+}
+
+.room-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 350px;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    align-items: center;
 }
 
-.room-form h2 {
-    margin-bottom: 1rem;
+.room-card p {
+    margin: 10px 0;
+    color: #333;
+    text-align: center;
 }
 
-.room-form form input,
-.room-form form textarea,
-.room-form form select,
-.room-form form button {
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.room-form form button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-    padding: 0.75rem;
-}
-
-.room-form form button:hover {
-    background-color: #0056b3;
-}
-
-.room-type-section {
-    margin-bottom: 2rem;
-}
-
-.room-type-section h2 {
-    margin-bottom: 1rem;
-}
-
-.room-list {
-    list-style-type: none;
-    padding: 0;
-}
-
-.room-item {
+.room-card .button-container {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    width: 100%;
 }
 
-.room-info {
-    flex-grow: 1;
-    margin-right: 1rem;
-}
-
-.room-info p {
-    margin: 0.5rem 0;
-}
-
-.room-actions button {
-    background-color: #007bff;
-    color: white;
+.room-card button {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
     border: none;
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
+    border-radius: 5px;
     cursor: pointer;
-    margin-right: 0.5rem;
+    transition: background-color 0.3s;
+    margin: 0 5px;
 }
 
-.room-actions button:hover {
-    background-color: #0056b3;
-}
-
-.add-room-button {
+.room-card button:first-child {
     background-color: #28a745;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    margin-bottom: 1rem;
+    color: #fff;
 }
 
-.add-room-button:hover {
+.room-card button:first-child:hover {
     background-color: #218838;
+}
+
+.room-card button:last-child {
+    background-color: #dc3545;
+    color: #fff;
+}
+
+.room-card button:last-child:hover {
+    background-color: #c82333;
 }

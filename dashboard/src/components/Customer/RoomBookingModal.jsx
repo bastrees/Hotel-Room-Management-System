@@ -22,12 +22,14 @@ const RoomBookingModal = ({ roomType, isOpen, onRequestClose, onBookingSubmit })
         return null;
     }
 
+    // Dynamically import the image based on room type
+    const imagePath = `/src/assets/images/${roomType.type.replace(/\s+/g, '')}.jpg`;
+
     return (
         <div className="modal-overlay">
             <div className="modal-content">
-                <button className="close-button" onClick={onRequestClose}>×</button>
                 <h2>{roomType.type}</h2>
-                <img src={roomType.image} alt={roomType.type} className="modal-image" />
+                <img src={imagePath} alt={roomType.type} className="modal-image" />
                 <p>{roomType.description}</p>
                 <p>Price: ${roomType.price}</p>
                 <form onSubmit={handleSubmit}>
@@ -54,6 +56,7 @@ const RoomBookingModal = ({ roomType, isOpen, onRequestClose, onBookingSubmit })
                         min="1"
                     />
                     <button type="submit">Book</button>
+                    <button type="button" onClick={onRequestClose} className="cancel-button">Cancel</button>
                 </form>
             </div>
         </div>

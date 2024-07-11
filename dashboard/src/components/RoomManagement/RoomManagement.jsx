@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './RoomManagement.css';
+import './RoomManagement.css'; // Import the CSS file
 import RoomModal from './RoomModal';
 
 const RoomManagement = () => {
-    const [rooms, setRooms] = useState([]);
+    const [roomsByType, setRoomsByType] = useState({});
     const [selectedRoom, setSelectedRoom] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
@@ -21,8 +21,12 @@ const RoomManagement = () => {
         try {
             const res = await axios.get(`${VITE_HOST}/api/rooms`);
             if (res.data.success) {
-                setRooms(res.data.rooms);
-                console.log('Fetched rooms:', res.data.rooms);
+                const rooms = res.data.rooms.reduce((acc, room) => {
+                    if (!acc[room.type]) acc[room.type] = [];
+                    acc[room.type].push(room);
+                    return acc;
+                }, {});
+                setRoomsByType(rooms);
             } else {
                 setError('Failed to fetch rooms');
             }
@@ -76,18 +80,28 @@ const RoomManagement = () => {
             ) : error ? (
                 <p>{error}</p>
             ) : (
-                <ul>
-                    {rooms.map((room) => (
-                        <li key={room._id}>
-                            <p>Room: {room.number} - {room.type}</p>
-                            <p>Description: {room.description}</p>
-                            <p>Price: ${room.price}</p>
-                            <p>Status: {room.status}</p>
-                            <button onClick={() => handleEdit(room)}>Edit</button>
-                            <button onClick={() => handleDelete(room._id)}>Delete</button>
-                        </li>
+                <div className="room-type-columns">
+                    {Object.keys(roomsByType).map((type) => (
+                        <div key={type} className="room-type-column">
+                            <h3>{type}</h3>
+                            <div className="room-grid">
+                                {roomsByType[type].map((room) => (
+                                    <div key={room._id} className="room-card">
+                                        <p><strong>Room {room.number}</strong></p>
+                                        <p>Type: {room.type}</p>
+                                        <p>Description: {room.description}</p>
+                                        <p>Price: ${room.price}</p>
+                                        <p>Status: {room.status}</p>
+                                        <div className="button-container">
+                                            <button onClick={() => handleEdit(room)}>Edit</button>
+                                            <button onClick={() => handleDelete(room._id)}>Delete</button>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
                     ))}
-                </ul>
+                </div>
             )}
             {modalIsOpen && (
                 <RoomModal

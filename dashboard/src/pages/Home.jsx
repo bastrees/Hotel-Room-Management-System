@@ -1,91 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Modal from 'react-modal';
+import React from 'react';
 import './css/Home.css';
-
-Modal.setAppElement('#root');
+import headerImage from '../assets/images/Header.jpg';
+import standardRoomImage from '../assets/images/StandardRoom.jpg';
+import deluxeRoomImage from '../assets/images/Deluxe.jpg';
 
 export default function Home() {
-    const [rooms, setRooms] = useState([]);
-    const [selectedRoom, setSelectedRoom] = useState(null);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const { VITE_HOST } = import.meta.env;
-
-    useEffect(() => {
-        fetchRooms();
-    }, []);
-
-    const fetchRooms = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const res = await axios.get(`${VITE_HOST}/api/rooms`);
-            if (res.data.success) {
-                setRooms(res.data.rooms);
-            } else {
-                setError('Failed to fetch rooms');
-            }
-            setLoading(false);
-        } catch (error) {
-            console.error('Error fetching rooms:', error);
-            setError(`Error fetching rooms: ${error.message}`);
-            setLoading(false);
-        }
-    };
-
-    const openModal = (room) => {
-        setSelectedRoom(room);
-        setModalIsOpen(true);
-    };
-
-    const closeModal = () => {
-        setSelectedRoom(null);
-        setModalIsOpen(false);
-    };
-
     return (
         <div className="home-container">
-            <h1>Welcome to HRMS</h1>
-            <p>Your one-stop solution for hotel room management</p>
-            <div className="home-buttons">
-                <a href="/login" className="home-button">Login</a>
-                <a href="/signup" className="home-button">Sign Up</a>
-            </div>
-            {loading ? (
-                <p>Loading rooms...</p>
-            ) : error ? (
-                <p>{error}</p>
-            ) : (
-                <ul className="room-list">
-                    {rooms.map((room) => (
-                        <li key={room._id} className="room-item" onClick={() => openModal(room)}>
-                            <h3>Room {room.number} - {room.type}</h3>
-                            <p>{room.description}</p>
-                            <p><strong>Price:</strong> ${room.price}</p>
-                            <p><strong>Status:</strong> {room.status}</p>
-                        </li>
-                    ))}
-                </ul>
-            )}
-            <Modal
-                isOpen={modalIsOpen}
-                onRequestClose={closeModal}
-                contentLabel="Room Details"
-                className="room-modal"
-                overlayClassName="room-modal-overlay"
-            >
-                {selectedRoom && (
-                    <div className="room-details">
-                        <h2>Room {selectedRoom.number} - {selectedRoom.type}</h2>
-                        <p>{selectedRoom.description}</p>
-                        <p><strong>Price:</strong> ${selectedRoom.price}</p>
-                        <p><strong>Status:</strong> {selectedRoom.status}</p>
-                        <button onClick={closeModal}>Close</button>
+            <header className="home-header">
+                <img src={headerImage} alt="Header" className="header-image" />
+                <div className="header-text">
+                    <h1>Welcome to HRMS</h1>
+                    <p>Your one-stop solution for hotel room management</p>
+                    <div className="home-buttons">
+                        <a href="/login" className="home-button">Login</a>
+                        <a href="/signup" className="home-button">Sign Up</a>
                     </div>
-                )}
-            </Modal>
+                </div>
+            </header>
+            
+            <section className="rooms">
+                <h2>Rooms</h2>
+                <div className="room-cards">
+                    <div className="room-card">
+                        <img src={standardRoomImage} alt="Standard Room" />
+                        <h3>Standard Room</h3>
+                        <p>Comfortable and affordable standard rooms.</p>
+                    </div>
+                    <div className="room-card">
+                        <img src={deluxeRoomImage} alt="Deluxe Room" />
+                        <h3>Deluxe Room</h3>
+                        <p>Spacious and luxurious deluxe rooms.</p>
+                    </div>
+                    {/* Add more room cards as needed */}
+                </div>
+            </section>
+
+            <section className="socials">
+                <h2>Follow Us</h2>
+                <div className="social-icons">
+                    <a href="#"><i className="fab fa-facebook-f"></i></a>
+                    <a href="#"><i className="fab fa-twitter"></i></a>
+                    <a href="#"><i className="fab fa-instagram"></i></a>
+                    {/* Add more social icons as needed */}
+                </div>
+            </section>
+
+            <footer className="footer">
+                <p>&copy; 2024 HRMS. All rights reserved.</p>
+            </footer>
         </div>
     );
 }

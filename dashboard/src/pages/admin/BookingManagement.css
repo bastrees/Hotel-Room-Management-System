@@ -1,0 +1,68 @@
+/* src/pages/admin/BookingManagement.css */
+
+.booking-management {
+    padding: 20px;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+}
+
+.booking-management h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.booking-management p {
+    font-size: 1rem;
+    color: #666;
+}
+
+.booking-list {
+    margin: 20px 0;
+}
+
+.booking-item {
+    display: flex;
+    flex-direction: column;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.booking-item h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.booking-item p {
+    font-size: 1rem;
+    margin-bottom: 5px;
+    color: #666;
+}
+
+.booking-item .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.booking-item .actions button {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.booking-item .actions .approve-button {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.booking-item .actions .reject-button {
+    background-color: #dc3545;
+    color: #fff;
+}

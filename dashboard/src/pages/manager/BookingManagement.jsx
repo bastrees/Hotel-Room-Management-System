@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import BookingList from '../../components/BookingList/BookingList';
+import './BookingManagement.css'; // Import the CSS file
 
 
 const BookingManagement = () => {
