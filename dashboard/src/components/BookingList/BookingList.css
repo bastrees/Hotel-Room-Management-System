@@ -1,5 +1,6 @@
 .booking-list {
     width: 100%;
+    max-width: 800px; /* Limit max-width for better readability */
     margin: 0 auto;
     display: flex;
     flex-direction: column;
@@ -10,23 +11,33 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 0.5rem;
+    padding: 1rem; /* Increase padding for better spacing */
     border: 1px solid #ccc;
     border-radius: 0.5rem;
+    background-color: #f9f9f9; /* Add background color for contrast */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow for depth */
 }
 
 .booking-info p {
     margin: 0.5rem 0;
+    font-size: 0.9rem; /* Adjust font size for better readability */
+    color: #333; /* Ensure text color is readable */
+}
+
+.booking-actions {
+    display: flex;
+    flex-direction: column; /* Stack buttons vertically */
+    gap: 0.5rem; /* Add gap between buttons */
 }
 
 .booking-actions button {
-    margin: 0 0.5rem;
     padding: 0.5rem 1rem;
     border: none;
     background-color: #007bff;
     color: white;
     cursor: pointer;
     border-radius: 0.25rem;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
 }
 
 .booking-actions button:hover {

@@ -18,7 +18,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <div className="navbar-brand">
-                <Link to="/">HRMS</Link>
+                <Link to="/">pagTURUGAN</Link>
             </div>
             <div className="navbar-links">
                 <Link to="/">Home</Link>
@@ -32,7 +32,12 @@ const Navbar = () => {
                     <>
                         {userRole === 'admin' && <Link to="/admin">Admin Dashboard</Link>}
                         {userRole === 'manager' && <Link to="/manager">Manager Dashboard</Link>}
-                        {userRole === 'customer' && <Link to="/customer">Customer Dashboard</Link>}
+                        {userRole === 'customer' && (
+                            <>
+                                <Link to="/customer/room-search">Book Room</Link>
+                                <Link to="/customer">Customer Dashboard</Link>
+                            </>
+                        )}
                         <button onClick={handleLogout}>Logout</button>
                     </>
                 )}

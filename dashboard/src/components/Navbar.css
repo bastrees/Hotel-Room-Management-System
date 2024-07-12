@@ -1,24 +1,26 @@
 /* src/components/Navbar.css */
 .navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem;
-    background-color: black;
-    color: white;
-  }
-  
-  .navbar a {
-    color: white;
-    margin: 0 1rem;
-    text-decoration: none;
-  }
-  
-  .navbar a:hover {
-    text-decoration: underline;
-  }
-
-  .navbar-brand a {
-    font-size: 2rem; /* Adjust this value as needed */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem;
+  background-color: black;
+  color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000; /* Ensure it stays above other content */
 }
-  
+
+.navbar a {
+  color: white;
+  margin: 0 1rem;
+  text-decoration: none;
+}
+
+.navbar a:hover {
+  text-decoration: underline;
+}
+
+.navbar-brand a {
+  font-size: 2rem; /* Adjust this value as needed */
+}

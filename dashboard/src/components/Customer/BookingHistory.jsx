@@ -1,14 +1,15 @@
 // src/components/Customer/BookingHistory.jsx
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import BookingList from '../BookingList/BookingList';
+import PaymentForm from '../Customer/PaymentForm';
 import './BookingHistory.css';
 
 const BookingHistory = () => {
     const [bookings, setBookings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [selectedBooking, setSelectedBooking] = useState(null);
     const { VITE_HOST } = import.meta.env;
 
     useEffect(() => {
@@ -43,6 +44,17 @@ const BookingHistory = () => {
         }
     };
 
+    const handlePaymentSuccess = async () => {
+        if (selectedBooking) {
+            try {
+                await axios.put(`${VITE_HOST}/api/bookings/update-status/${selectedBooking._id}`);
+                fetchBookings();
+            } catch (error) {
+                console.error('Error updating booking status:', error);
+            }
+        }
+    };
+
     return (
         <div className="booking-history">
             <h2>Booking History</h2>
@@ -51,7 +63,16 @@ const BookingHistory = () => {
             ) : error ? (
                 <p>{error}</p>
             ) : (
-                <BookingList bookings={bookings} onCancel={handleCancel} userRole="customer" />
+                <>
+                    <BookingList bookings={bookings} onCancel={handleCancel} userRole="customer" />
+                    {selectedBooking && (
+                        <PaymentForm
+                            bookingId={selectedBooking._id}
+                            amount={selectedBooking.roomId.price}
+                            onPaymentSuccess={handlePaymentSuccess}
+                        />
+                    )}
+                </>
             )}
         </div>
     );

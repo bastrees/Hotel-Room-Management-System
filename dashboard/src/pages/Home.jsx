@@ -10,7 +10,7 @@ export default function Home() {
             <header className="home-header">
                 <img src={headerImage} alt="Header" className="header-image" />
                 <div className="header-text">
-                    <h1>Welcome to HRMS</h1>
+                    <h1>Welcome to pagTURUGAN</h1>
                     <p>Your one-stop solution for hotel room management</p>
                     <div className="home-buttons">
                         <a href="/login" className="home-button">Login</a>
@@ -47,7 +47,7 @@ export default function Home() {
             </section>
 
             <footer className="footer">
-                <p>&copy; 2024 HRMS. All rights reserved.</p>
+                <p>&copy; 2024 pagTURUGAN. All rights reserved.</p>
             </footer>
         </div>
     );

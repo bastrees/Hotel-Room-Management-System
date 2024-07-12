@@ -18,6 +18,7 @@ import AdminBookingManagement from './pages/admin/BookingManagement';
 import ManagerBookingManagement from './pages/manager/BookingManagement';
 import ProtectedRoute from './ProtectedRoute';
 import Layout from './components/Layout';
+import PaymentForm from './components/Customer/PaymentForm';
 import { roles } from './roles';
 
 const Routes = createBrowserRouter([
@@ -62,6 +63,14 @@ const Routes = createBrowserRouter([
         element: (
             <ProtectedRoute allowedRoles={[roles.CUSTOMER]}>
                 <Layout><BookingHistory /></Layout>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/payment',
+        element: (
+            <ProtectedRoute allowedRoles={[roles.CUSTOMER]}>
+                <Layout><PaymentForm /></Layout>
             </ProtectedRoute>
         ),
     },

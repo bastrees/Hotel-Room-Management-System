@@ -38,7 +38,7 @@ const BookingController = {
     approveBooking: async (req, res) => {
         try {
             const { id } = req.params;
-            const booking = await BookingModel.findByIdAndUpdate(id, { status: 'approved' }, { new: true }).populate('roomId');
+            const booking = await BookingModel.findByIdAndUpdate(id, { status: 'approved' }, { new: true }).populate('roomId').populate('customerId');
             if (!booking) {
                 return res.json({ success: false, message: 'Booking not found' });
             }
@@ -54,7 +54,7 @@ const BookingController = {
     rejectBooking: async (req, res) => {
         try {
             const { id } = req.params;
-            const booking = await BookingModel.findByIdAndUpdate(id, { status: 'rejected' }, { new: true });
+            const booking = await BookingModel.findByIdAndUpdate(id, { status: 'rejected' }, { new: true }).populate('customerId');
             if (!booking) {
                 return res.json({ success: false, message: 'Booking not found' });
             }
@@ -67,7 +67,7 @@ const BookingController = {
     getBookingsByCustomerId: async (req, res) => {
         try {
             const { customerId } = req.params;
-            const bookings = await BookingModel.find({ customerId }).populate('roomId');
+            const bookings = await BookingModel.find({ customerId }).populate('roomId').populate('customerId');
             res.json({ success: true, bookings });
         } catch (error) {
             res.json({ success: false, message: `Error fetching bookings: ${error.message}` });
