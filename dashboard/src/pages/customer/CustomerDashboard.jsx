@@ -14,11 +14,11 @@ const CustomerDashboard = () => {
                     <p>Find and view available rooms.</p>
                     <button>Search Rooms</button>
                 </div>
-                <div className="card" onClick={() => navigate('/customer/book-room')}>
+                {/* <div className="card" onClick={() => navigate('/customer/book-room')}>
                     <h2>Book a Room</h2>
                     <p>Make a reservation for a room.</p>
                     <button>Book a Room</button>
-                </div>
+                </div> */}
                 <div className="card" onClick={() => navigate('/customer/booking-history')}>
                     <h2>Booking History</h2>
                     <p>View your past bookings and manage reservations.</p>
