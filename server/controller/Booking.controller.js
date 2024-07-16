@@ -4,8 +4,8 @@ const RoomModel = require('../models/Room.model');
 const BookingController = {
     createBooking: async (req, res) => {
         try {
-            const { roomId, customerId, checkInDate, checkOutDate, numberOfGuests } = req.body;
-            const booking = new BookingModel({ roomId, customerId, checkInDate, checkOutDate, numberOfGuests });
+            const { roomId, customerId, checkInDate, checkOutDate, numberOfGuests, totalAmountPaid } = req.body;
+            const booking = new BookingModel({ roomId, customerId, checkInDate, checkOutDate, numberOfGuests, totalAmountPaid });
             const savedBooking = await booking.save();
             res.json({ success: true, message: 'Booking created successfully!', booking: savedBooking });
         } catch (error) {
