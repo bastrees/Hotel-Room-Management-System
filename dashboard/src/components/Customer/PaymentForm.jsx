@@ -51,6 +51,7 @@ const PaymentForm = () => {
                 checkInDate,
                 checkOutDate,
                 numberOfGuests,
+                totalAmountPaid: totalCost  // Add total amount paid
             };
 
             const res = await axios.post(`${VITE_HOST}/api/bookings`, bookingDetails);
