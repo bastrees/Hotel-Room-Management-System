@@ -6,6 +6,7 @@ const ConnectToDatabase = require('../config/db');
 const UserRoute = require('../routes/User.routes');
 const RoomRoute = require('../routes/Room.routes');
 const BookingRoute = require('../routes/Booking.routes');
+const ReportRoute = require('../routes/Report.routes');
 
 app.use(cors({
     origin: '*',
@@ -26,5 +27,6 @@ app.get('/', (req, res) => {
 app.use('/api', UserRoute);
 app.use('/api', RoomRoute);
 app.use('/api', BookingRoute);
+app.use('/api/reports', ReportRoute);
 
 module.exports = app;
