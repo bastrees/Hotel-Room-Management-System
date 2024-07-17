@@ -1,5 +1,19 @@
 const bcrypt = require('bcrypt');
 const UserModel = require('../models/User.model');
+const AuditLog = require('../models/AuditLog.model');
+
+const createAuditLog = async (userId, action, details) => {
+    try {
+        const auditLog = new AuditLog({
+            userId,
+            action,
+            details
+        });
+        await auditLog.save();
+    } catch (error) {
+        console.error('Error creating audit log:', error);
+    }
+};
 
 const UserController = {
     CreateUser: async (req, res) => {
@@ -50,6 +64,9 @@ const UserController = {
 
                 if (isPasswordCorrect) {
                     if (user.isActive) {
+
+                        await createAuditLog(user._id, 'Login', `User ${user.username} logged in.`);
+                        
                         res.json({
                             success: true,
                             message: 'User exists, login successfully',
@@ -69,6 +86,21 @@ const UserController = {
             }
         } catch (error) {
             res.json({ error: `LoginUser in user controller error ${error}` });
+        }
+    },
+
+    LogoutUser: async (req, res) => {
+        try {
+            const { userId } = req.body;
+            const user = await UserModel.findById(userId);
+            if (user) {
+                await createAuditLog(userId, 'logout', `User ${user.username} logged out`);
+                res.json({ success: true, message: 'User logged out successfully' });
+            } else {
+                res.json({ success: false, message: 'User not found' });
+            }
+        } catch (error) {
+            res.json({ error: `LogoutUser in user controller error ${error}` });
         }
     },
 

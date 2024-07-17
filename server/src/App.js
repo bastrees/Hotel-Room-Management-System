@@ -7,6 +7,7 @@ const UserRoute = require('../routes/User.routes');
 const RoomRoute = require('../routes/Room.routes');
 const BookingRoute = require('../routes/Booking.routes');
 const ReportRoute = require('../routes/Report.routes');
+const auditLogRoutes = require('../routes/auditlog.routes');
 
 app.use(cors({
     origin: '*',
@@ -28,5 +29,7 @@ app.use('/api', UserRoute);
 app.use('/api', RoomRoute);
 app.use('/api', BookingRoute);
 app.use('/api/reports', ReportRoute);
+app.use('/api/auditlogs', auditLogRoutes);
+
 
 module.exports = app;
