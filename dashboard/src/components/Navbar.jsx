@@ -1,16 +1,26 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import './Navbar.css';
 
 const Navbar = () => {
     const navigate = useNavigate();
+    const { VITE_HOST } = import.meta.env;
 
-    const handleLogout = () => {
-        localStorage.removeItem('userId');
-        localStorage.removeItem('userRole');
-        localStorage.removeItem('firstName');
-        localStorage.removeItem('lastName');
-        navigate('/login');
+    const handleLogout = async () => {
+        try {
+            const userId = localStorage.getItem('userId');
+            await axios.post(`${VITE_HOST}/api/logout`, { userId });
+
+            localStorage.removeItem('userId');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('firstName');
+            localStorage.removeItem('lastName');
+
+            navigate('/login');
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
     };
 
     const userRole = localStorage.getItem('userRole');
