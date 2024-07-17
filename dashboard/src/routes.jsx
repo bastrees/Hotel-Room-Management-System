@@ -20,6 +20,7 @@ import ProtectedRoute from './ProtectedRoute';
 import Layout from './components/Layout';
 import PaymentForm from './components/Customer/PaymentForm';
 import { roles } from './roles';
+import AuditLogs from './pages/admin/AuditLogs';
 
 const Routes = createBrowserRouter([
     {
@@ -119,6 +120,14 @@ const Routes = createBrowserRouter([
         element: (
             <ProtectedRoute allowedRoles={[roles.MANAGER]}>
                 <Layout><ManagerDashboard /></Layout>
+            </ProtectedRoute>
+        ),
+    },
+    {
+        path: '/admin/audit-logs',
+        element: (
+            <ProtectedRoute allowedRoles={[roles.ADMIN]}>
+                <Layout><AuditLogs /></Layout>
             </ProtectedRoute>
         ),
     },
