@@ -1,12 +1,19 @@
 const BookingModel = require('../models/Booking.model');
 const RoomModel = require('../models/Room.model');
+const AuditLogModel = require('../models/AuditLog.model');
+
+const logAudit = async (userId, action, details) => {
+    await AuditLogModel.create({ userId, action, details });
+};
 
 const BookingController = {
     createBooking: async (req, res) => {
         try {
-            const { roomId, customerId, checkInDate, checkOutDate, numberOfGuests, totalAmountPaid } = req.body;
-            const booking = new BookingModel({ roomId, customerId, checkInDate, checkOutDate, numberOfGuests, totalAmountPaid });
+            const { roomId, customerId, checkInDate, checkOutDate, numberOfGuests } = req.body;
+            const booking = new BookingModel({ roomId, customerId, checkInDate, checkOutDate, numberOfGuests });
             const savedBooking = await booking.save();
+            await logAudit(customerId, 'createBooking', `Created booking for room ${roomId}`);
+
             res.json({ success: true, message: 'Booking created successfully!', booking: savedBooking });
         } catch (error) {
             res.json({ success: false, message: `Error creating booking: ${error.message}` });
@@ -29,6 +36,7 @@ const BookingController = {
             if (!booking) {
                 return res.json({ success: false, message: 'Booking not found' });
             }
+            await logAudit(req.user._id, 'cancelBooking', `Canceled booking ${id}`);
             res.json({ success: true, message: 'Booking canceled successfully!' });
         } catch (error) {
             res.json({ success: false, message: `Error canceling booking: ${error.message}` });
@@ -38,12 +46,13 @@ const BookingController = {
     approveBooking: async (req, res) => {
         try {
             const { id } = req.params;
-            const booking = await BookingModel.findByIdAndUpdate(id, { status: 'approved' }, { new: true }).populate('roomId').populate('customerId');
+            const booking = await BookingModel.findByIdAndUpdate(id, { status: 'approved' }, { new: true }).populate('roomId');
             if (!booking) {
                 return res.json({ success: false, message: 'Booking not found' });
             }
 
             await RoomModel.findByIdAndUpdate(booking.roomId._id, { status: 'booked' });
+            await logAudit(req.user._id, 'approveBooking', `Approved booking ${id}`);
 
             res.json({ success: true, message: 'Booking approved successfully!', booking });
         } catch (error) {
@@ -54,10 +63,12 @@ const BookingController = {
     rejectBooking: async (req, res) => {
         try {
             const { id } = req.params;
-            const booking = await BookingModel.findByIdAndUpdate(id, { status: 'rejected' }, { new: true }).populate('customerId');
+            const booking = await BookingModel.findByIdAndUpdate(id, { status: 'rejected' }, { new: true });
             if (!booking) {
                 return res.json({ success: false, message: 'Booking not found' });
             }
+            await logAudit(req.user._id, 'rejectBooking', `Rejected booking ${id}`);
+
             res.json({ success: true, message: 'Booking rejected successfully!', booking });
         } catch (error) {
             res.json({ success: false, message: `Error rejecting booking: ${error.message}` });
