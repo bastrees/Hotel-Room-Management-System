@@ -1,4 +1,3 @@
-// src/components/Customer/PaymentForm.jsx
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -12,8 +11,27 @@ const PaymentForm = () => {
         debitAccount: '',
         creditAccount: '',
         amount: totalCost,
+        bank: ''
     });
+    const [actualCreditAccount, setActualCreditAccount] = useState('');
     const { VITE_HOST } = import.meta.env;
+
+    const handleBankChange = (e) => {
+        const bank = e.target.value;
+        let creditAccount = '';
+        let actualAccount = '';
+
+        if (bank === 'unionbank') {
+            creditAccount = '*********020';
+            actualAccount = '000000020';
+        } else if (bank === 'metrobank') {
+            creditAccount = '*********123'; // Placeholder for Metrobank account number
+            actualAccount = '000000123'; // Replace with actual Metrobank account number
+        }
+
+        setPaymentDetails((prev) => ({ ...prev, bank, creditAccount }));
+        setActualCreditAccount(actualAccount);
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -24,9 +42,16 @@ const PaymentForm = () => {
         try {
             const token = "$2b$10$fX93xp0J4IQg/sJg5BS2oerADDj0lja8JxLyy96UmOavD0Xo/cqo."; // Your actual token
 
+            const bankUrl = paymentDetails.bank === 'unionbank'
+                ? 'http://192.168.10.14:3001/api/unionbank/transfertransaction'
+                : 'http://your-metrobank-api-endpoint'; // Replace with actual Metrobank API endpoint
+
             const res = await axios.post(
-                'http://192.168.10.14:3001/api/unionbank/transfertransaction',
-                paymentDetails,
+                bankUrl,
+                {
+                    ...paymentDetails,
+                    creditAccount: actualCreditAccount  // Use the actual account number
+                },
                 {
                     headers: {
                         Authorization: `Bearer ${token}`
@@ -77,6 +102,12 @@ const PaymentForm = () => {
         <div className="payment-form">
             <h2>Payment Form</h2>
             <form onSubmit={handleSubmit}>
+                <label htmlFor="bank">Bank:</label>
+                <select name="bank" value={paymentDetails.bank} onChange={handleBankChange} required>
+                    <option value="">Select a Bank</option>
+                    <option value="unionbank">UnionBank</option>
+                    <option value="metrobank">MetroBank</option>
+                </select>
                 <label htmlFor="debitAccount">Debit Account:</label>
                 <input
                     type="text"
@@ -90,8 +121,7 @@ const PaymentForm = () => {
                     type="text"
                     name="creditAccount"
                     value={paymentDetails.creditAccount}
-                    onChange={handleChange}
-                    required
+                    readOnly
                 />
                 <label htmlFor="amount">Amount:</label>
                 <input

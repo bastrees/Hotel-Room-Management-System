@@ -9,8 +9,8 @@ const logAudit = async (userId, action, details) => {
 const BookingController = {
     createBooking: async (req, res) => {
         try {
-            const { roomId, customerId, checkInDate, checkOutDate, numberOfGuests } = req.body;
-            const booking = new BookingModel({ roomId, customerId, checkInDate, checkOutDate, numberOfGuests });
+            const { roomId, customerId, checkInDate, checkOutDate, numberOfGuests, totalAmountPaid } = req.body;
+            const booking = new BookingModel({ roomId, customerId, checkInDate, checkOutDate, numberOfGuests, totalAmountPaid });
             const savedBooking = await booking.save();
             await logAudit(customerId, 'createBooking', `Created booking for room ${roomId}`);
 
@@ -36,7 +36,6 @@ const BookingController = {
             if (!booking) {
                 return res.json({ success: false, message: 'Booking not found' });
             }
-            await logAudit(req.user._id, 'cancelBooking', `Canceled booking ${id}`);
             res.json({ success: true, message: 'Booking canceled successfully!' });
         } catch (error) {
             res.json({ success: false, message: `Error canceling booking: ${error.message}` });

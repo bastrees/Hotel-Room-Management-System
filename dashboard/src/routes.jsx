@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import Home from './pages/Home';
 import About from './pages/About';
 import Contact from './pages/Contact';
+import Connections from './pages/Connections';  // Import the new Connections page
 import Login from './pages/Login';
 import SignUp from './pages/SignUp';
 import CustomerDashboard from './pages/customer/CustomerDashboard';
@@ -34,6 +35,10 @@ const Routes = createBrowserRouter([
     {
         path: '/contact',
         element: <Layout><Contact /></Layout>,
+    },
+    {
+        path: '/partners',  // Add the new route here
+        element: <Layout><Connections /></Layout>,
     },
     {
         path: '/login',
