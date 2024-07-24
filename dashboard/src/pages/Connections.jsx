@@ -38,7 +38,7 @@ const classmates = [
     { name: 'Savemore', website: 'http://192.168.10.25', logo: classmate11Logo },
     { name: 'Shoepatoes', website: 'http://192.168.10.26', logo: classmate5Logo },
     { name: 'SkyEase', website: 'http://192.168.10.41', logo: classmate19Logo },
-    { name: 'Tiago Shop', website: 'http://192.168.10.13', logo: classmate12Logo },
+    { name: 'Tiago Shop', website: 'https://tiagoshop.vercel.app', logo: classmate12Logo },
     { name: 'Toyota', website: 'http://192.168.10.38', logo: classmate13Logo },
     { name: 'TX', website: 'http://192.168.10.22', logo: classmate14Logo },
     { name: 'Union Bank', website: 'http://192.168.10.14', logo: classmate15Logo },
