@@ -19,6 +19,8 @@ import classmate14Logo from '../assets/logos/tx.png';
 import classmate15Logo from '../assets/logos/UnionBank.png';
 import classmate16Logo from '../assets/logos/WATSONS.png';
 import classmate17Logo from '../assets/logos/WNE.png';
+import classmate18Logo from '../assets/logos/LRT-LOGO.png';
+import classmate19Logo from '../assets/logos/SkyEase.png';
 
 // Add more imports as needed
 
@@ -27,19 +29,21 @@ const classmates = [
     { name: 'Clickers', website: 'http://192.168.10.17', logo: classmate2Logo },
     { name: 'INGCO', website: 'http://192.168.10.29', logo: classmate3Logo },
     { name: 'KFC', website: 'http://192.168.10.19', logo: classmate4Logo },
-     { name: 'Shoepatoes', website: 'http://192.168.10.26', logo: classmate5Logo },
-    { name: 'MedPoint', website: 'http://192.168.10.29', logo: classmate6Logo },
-    { name: 'Motortrade', website: 'http://192.168.10.23', logo: classmate7Logo },
+    { name: 'LRT', website: 'http://192.168.10.43', logo: classmate18Logo },
+    { name: 'MedPoint', website: 'http://192.168.10.36', logo: classmate6Logo },
+    { name: 'Motortrade', website: 'http://192.168.10.23/moto', logo: classmate7Logo },
     { name: 'National Book Store', website: 'http://192.168.10.24', logo: classmate8Logo },
     { name: 'OHMART', website: 'http://192.168.10.21', logo: classmate9Logo },
     { name: 'ParaPo', website: 'http://192.168.10.37   ', logo: classmate10Logo },
     { name: 'Savemore', website: 'http://192.168.10.25', logo: classmate11Logo },
+    { name: 'Shoepatoes', website: 'http://192.168.10.26', logo: classmate5Logo },
+    { name: 'SkyEase', website: 'http://192.168.10.41', logo: classmate19Logo },
     { name: 'Tiago Shop', website: 'http://192.168.10.13', logo: classmate12Logo },
     { name: 'Toyota', website: 'http://192.168.10.38', logo: classmate13Logo },
     { name: 'TX', website: 'http://192.168.10.22', logo: classmate14Logo },
     { name: 'Union Bank', website: 'http://192.168.10.14', logo: classmate15Logo },
     { name: 'Watsons', website: 'http://192.168.10.27', logo: classmate16Logo },
-    { name: 'WNE', website: 'http://192.168.10.12', logo: classmate17Logo },
+    { name: 'WNE', website: 'http://192.168.10.12/yacapin', logo: classmate17Logo },
     // Add more classmates as needed
 ];  
 

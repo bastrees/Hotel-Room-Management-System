@@ -5,6 +5,8 @@ import standardRoomImage from '../assets/images/StandardRoom.jpg';
 import deluxeRoomImage from '../assets/images/Deluxe.jpg';
 
 export default function Home() {
+    const userRole = localStorage.getItem('userRole');
+
     return (
         <div className="home-container">
             <header className="home-header">
@@ -12,10 +14,12 @@ export default function Home() {
                 <div className="header-text">
                     <h1>Welcome to pagTURUGAN</h1>
                     <p>Your one-stop solution for hotel room management</p>
-                    <div className="home-buttons">
-                        <a href="/login" className="home-button">Login</a>
-                        <a href="/signup" className="home-button">Sign Up</a>
-                    </div>
+                    {!userRole && (
+                        <div className="home-buttons">
+                            <a href="/login" className="home-button">Login</a>
+                            <a href="/signup" className="home-button">Sign Up</a>
+                        </div>
+                    )}
                 </div>
             </header>
             

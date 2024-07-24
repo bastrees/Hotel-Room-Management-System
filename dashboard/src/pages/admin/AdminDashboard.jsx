@@ -29,11 +29,6 @@ const AdminDashboard = () => {
                     <p>View and manage bookings.</p>
                     <button>View Bookings</button>
                 </div>
-                <div className="card" onClick={() => navigate('/admin/notifications')}>
-                    <h2>Notifications</h2>
-                    <p>Manage notification settings and templates.</p>
-                    <button>Manage Notifications</button>
-                </div>
                 <div className="card" onClick={() => navigate('/admin/audit-logs')}>
                     <h2>Audit Logs</h2>
                     <p>View audit logs for user actions.</p>
