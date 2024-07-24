@@ -40,7 +40,7 @@ const PaymentForm = () => {
 
     const handleTransfer = async () => {
         try {
-            const token = "$2b$10$fX93xp0J4IQg/sJg5BS2oerADDj0lja8JxLyy96UmOavD0Xo/cqo."; // Your actual token
+            const token = "$2b$10$J/3l8q58ya6fhW1.0UxaDeshbTEmDLusHYlER.C7kGo0p6fAXSYpi"; // Your actual token
 
             const bankUrl = paymentDetails.bank === 'unionbank'
                 ? 'http://192.168.10.14:3001/api/unionbank/transfertransaction'
